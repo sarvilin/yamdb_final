@@ -9,7 +9,7 @@ services:
       - ./.env
   web:
 #    build: ../api_yamdb
-    image: sarvilin/infra_actions
+    image: sarvilin/yamdb_final
     restart: always
     volumes:
       - static_value:/app/static/

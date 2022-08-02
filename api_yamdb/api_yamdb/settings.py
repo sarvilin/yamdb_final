@@ -7,7 +7,11 @@ SECRET_KEY = os.getenv('SECRET_KEY', default='foo')
 
 DEBUG = os.getenv('DEBUG', default=0)
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default=['*'])
+# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default=['*'])
+ALLOWED_HOSTS = [
+    '84.252.138.138',
+    '127.0.0.1',
+]
 
 AUTH_USER_MODEL = 'reviews.User'
 

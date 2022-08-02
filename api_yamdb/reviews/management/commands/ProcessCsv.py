@@ -1,11 +1,9 @@
 import csv
 
-from django.core.management.base import BaseCommand
 from django.conf import settings
-from reviews.models import (
-    User, Category, Title, Review,
-    Comments, Genre, GenreTitle
-)
+from django.core.management.base import BaseCommand
+from reviews.models import (Category, Comments, Genre, GenreTitle, Review,
+                            Title, User)
 
 
 class Command(BaseCommand):

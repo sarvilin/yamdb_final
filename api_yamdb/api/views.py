@@ -6,7 +6,7 @@ from django.core import mail
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, filters, serializers, status
+from rest_framework import filters, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
@@ -14,16 +14,17 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from reviews.models import Category, Genre, Review, Title, User
 
-from reviews.models import User, Title, Category, Genre, Review
 from .filters import TitleFilter
 from .mixins import ModelMixinSet
-from .permissions import (
-    IsAdminUserOrReadOnly, AdminModeratorAuthorPermission, AdminOnly)
-from .serializers import (
-    UserSerializer, CategorySerializer, GenreSerializer, ReviewSerializer,
-    CommentsSerializer, TitleReadSerializer, TitleWriteSerializer,
-    UserGetTokenSerializer, UserSignSerializer)
+from .permissions import (AdminModeratorAuthorPermission, AdminOnly,
+                          IsAdminUserOrReadOnly)
+from .serializers import (CategorySerializer, CommentsSerializer,
+                          GenreSerializer, ReviewSerializer,
+                          TitleReadSerializer, TitleWriteSerializer,
+                          UserGetTokenSerializer, UserSerializer,
+                          UserSignSerializer)
 
 
 class UserViewSet(viewsets.ModelViewSet):

@@ -11,6 +11,7 @@ DEBUG = os.getenv('DEBUG', default=0)
 ALLOWED_HOSTS = [
     '84.252.138.138',
     '127.0.0.1',
+    'localhost',
 ]
 
 AUTH_USER_MODEL = 'reviews.User'

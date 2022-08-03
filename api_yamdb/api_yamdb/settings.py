@@ -13,6 +13,7 @@ ALLOWED_HOSTS = [
     '84.252.138.138',
     '127.0.0.1',
     'localhost',
+    'web',
 ]
 
 AUTH_USER_MODEL = 'reviews.User'

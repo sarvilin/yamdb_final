@@ -2,10 +2,10 @@ FROM python:3.7-slim
 
 #WORKDIR /app
 #COPY . .
-COPY ./ /app
+COPY ./api_yamdb /app
+WORKDIR /app
 RUN python3 -m pip install --upgrade pip
-RUN pip3 install -r /app/api_yamdb/requirements.txt --no-cache-dir
-WORKDIR /app/api_yamdb
+RUN pip3 install -r requirements.txt --no-cache-dir
 CMD ["gunicorn", "api_yamdb.wsgi:application", "--bind", "0:8000" ]
 
 

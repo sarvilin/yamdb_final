@@ -5,10 +5,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.getenv('SECRET_KEY', default='foo')
 
-# DEBUG = os.getenv('DEBUG', default=0)
-DEBUG = True
+DEBUG = os.getenv('DEBUG', default=0)
 
-# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default=['*'])
 ALLOWED_HOSTS = [
     '84.252.138.138',
     '127.0.0.1',
@@ -104,8 +102,6 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-
-# STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 

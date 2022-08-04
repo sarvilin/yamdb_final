@@ -8,7 +8,6 @@ services:
     env_file:
       - ./.env
   web:
-#    build: ../api_yamdb
     image: sarvilin/yamdb_final
     restart: always
     volumes:

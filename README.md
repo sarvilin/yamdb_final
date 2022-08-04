@@ -1,5 +1,9 @@
 # Проект "YaMDb"
 
+версия c Docker, Continuous Integration на GitHub Actions
+
+развернут по адресу http://84.252.138.138
+
 ![yamdb_workflow](https://github.com/sarvilin/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
 
 ## Описание
@@ -16,10 +20,8 @@
 произведению рейтинг (оценку в диапазоне от одного до десяти). 
 По оценкам автоматически высчитывается средняя оценка произведения.
 
-Полная документация к API находится в /redoc
+Полная документация к API:  http://84.252.138.138/redoc
 
-При запущенном проекте:
-http://localhost/redoc/
 
 ###  Технологии
 - Python 3.7
@@ -27,61 +29,74 @@ http://localhost/redoc/
 - DjangoREST framework 3.12.4
 - JWT
 
-### Как запустить проект:
 
-Клонировать репозиторий и перейти в него в командной строке:
-```
-git clone https://github.com/sarvilin/infra_sp2.git
-```
-```
-cd infra_sp2
-```
+## Установка на локальном компьютере
+Эти инструкции помогут вам создать копию проекта и запустить ее на локальном компьютере для целей разработки и тестирования.
 
-Создать env-файл (infra_sp2/infra/.env) по шаблону: 
-```
-DEBUG=1
-SECRET_KEY='<ВАШ СЕКРЕТНЫЙ КЛЮЧ DJANGO'
-ALLOWED_HOSTS=localhost ['*']
-DB_ENGINE=django.db.backends.postgresql
-DB_NAME=postgres
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
-DB_HOST=db
-DB_PORT=5432
-```
+### Установка Docker
+Установите Docker, используя инструкции с официального сайта:
+- для [Windows и MacOS](https://www.docker.com/products/docker-desktop)
+- для [Linux](https://docs.docker.com/engine/install/ubuntu/). Отдельно потребуется установть [Docker Compose](https://docs.docker.com/compose/install/)
 
-Запуcтить проект в docker:
-```
-cd infra
-```
-```
-sudo docker-compose up -d --build 
-```
+### Запуск проекта (на примере Linux)
 
-Создать миграции, создать superuser, собрать статику:
+- Склонируйте в текущую папку `git clone https://github.com/sarvilin/yamdb_final`
+- Перейдите в папку `cd yamdb_final`
+- Создайте файл `.env` командой `touch .env` и добавьте в него переменные окружения для работы с базой данных:
 ```
-sudo docker-compose exec web python3 manage.py migrate
+DB_NAME=postgres # имя базы данных
+POSTGRES_USER=postgres # логин для подключения к базе данных
+POSTGRES_PASSWORD=postgres # пароль для подключения к БД (установите свой)
+DB_HOST=db # название сервиса (контейнера)
+DB_PORT=5432 # порт для подключения к БД 
 ```
-```
-sudo docker-compose exec web python3 manage.py createsuperuser
-```
-```
-sudo docker-compose exec web python3 manage.py collectstatic --no-input 
-```
+- Запустите docker-compose командой `sudo docker-compose up -d`
 
-Запустить скрипт первоначального заполнения базы (если нужно):
+
+## Деплой на удаленный сервер
+Для запуска проекта на удаленном сервере необходимо:
+- скопировать на сервер файлы `docker-compose.yaml`, `.env` и папку `nginx` командами:
 ```
-sudo docker-compose exec web python3 manage.py ProcessCsv
+scp docker-compose.yaml  <user>@<server-ip>:
+scp .env <user>@<server-ip>:
+scp -r nginx/ <user>@<server-ip>:
+
+```
+- создать переменные окружения в разделе `secrets` настроек текущего репозитория:
+```
+DOCKER_PASSWORD # Пароль от Docker Hub
+DOCKER_USERNAME # Логин от Docker Hub
+HOST # Публичный ip адрес сервера
+USER # Пользователь зарегистрированный на сервере
+PASSPHRASE # Если ssh-ключ защищен фразой-паролем
+SSH_KEY # Приватный ssh-ключ
+TELEGRAM_TO # ID телеграм-аккаунта
+TELEGRAM_TOKEN # Токен бота
 ```
 
-После запуска проект доступен по URL:
-```
-http://localhost/
-```
+### После каждого обновления репозитория (`git push`) будет происходить:
+1. Проверка кода на соответствие стандарту PEP8 (с помощью пакета flake8) и запуск pytest из репозитория yamdb_final
+2. Сборка и доставка докер-образов на Docker Hub.
+3. Автоматический деплой.
+4. Отправка уведомления в Telegram.
 
-### Авторы
-```
-Панасенков Денис
-Сарвилин Алексей
-Анучин Антон
-```
+
+## После запуска проекта необходимо:
+
+- Сделать миграции `sudo docker-compose exec web python manage.py migrate`
+- Соберите статику командой `sudo docker-compose exec web python manage.py collectstatic --no-input`
+- Создайте суперпользователя Django `sudo docker-compose exec web python manage.py createsuperuser`
+- Загрузите данные в базу данных при необходимости `sudo docker-compose exec web python3 manage.py ProcessCsv`
+
+## Участники:
+
+[Сарвилин Алексей.](https://github.com/sarvilin/yamdb_final) 
+- Категории (Categories), жанры (Genres) и произведения (Titles): модели, view и эндпойнты для них и рейтинги. 
+- Докеризация, разработка процесса CI (непрерывной интеграции) с использованием GitHub Actions. 
+- Подготовка  к production и deploy на YandexCloud.
+
+[Панасенков Денис.](https://github.com/uchastnik/api_yamdb)
+Управление пользователями (Auth и Users): система регистрации и аутентификации, права доступа, работа с токеном, система подтверждения e-mail, поля.
+
+[Анучин Антон.](https://github.com/Homer-Ford/yamdb_final)
+Отзывы (Review) и комментарии (Comments): модели и view, эндпойнты, права доступа для запросов. Рейтинги произведений.

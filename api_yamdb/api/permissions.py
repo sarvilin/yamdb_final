@@ -5,7 +5,7 @@ class AdminOnly(permissions.BasePermission):
     """Разрешения только для администратора. """
 
     def has_permission(self, request, view):
-        return(
+        return (
             request.user.is_admin
             or request.user.is_staff
         )
